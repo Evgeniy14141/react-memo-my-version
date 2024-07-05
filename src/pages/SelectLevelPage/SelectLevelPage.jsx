@@ -5,13 +5,6 @@ import { useState } from "react";
 export function SelectLevelPage() {
   const [checked, setChecked] = useState(false);
 
-  let msg;
-  if (checked) {
-    msg = <span>Режим игры до трёх попыток</span>;
-  } else {
-    msg = <span>Режим игры до трёх попыток</span>;
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
@@ -34,8 +27,8 @@ export function SelectLevelPage() {
           </li>
         </ul>
         <div className={styles.gameMode}>
-          <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} />
-          <span>{msg}</span>
+          <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} id="gameMode" />
+          <label for="gameMode">Режим игры с тремя попыткми</label>
         </div>
       </div>
     </div>
