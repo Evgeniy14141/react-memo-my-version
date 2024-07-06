@@ -28,7 +28,12 @@ export function SelectLevelPage() {
         </ul>
         <div className={styles.gameMode}>
           <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} id="gameMode" />
-          <label for="gameMode">Режим игры с тремя попыткми</label>
+          <label htmlFor="gameMode">Легкий режим с тремя жизнями</label>
+        </div>
+        <div className={styles.leaderboardLinkBox}>
+          <Link to={`/leaderboard`} className={styles.leaderboardLink}>
+            Перейти к лидерборду
+          </Link>
         </div>
       </div>
     </div>
