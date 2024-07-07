@@ -1,40 +1,50 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
 import { useState } from "react";
+import { useEasyMode } from "../../hooks/useEasyMode";
 
 export function SelectLevelPage() {
-  const [checked, setChecked] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const navigate = useNavigate();
+  const { isEasyMode, setIsEasyMode } = useEasyMode();
+
+  const handleEasyModeChange = event => {
+    setIsEasyMode(event.target.checked);
+  };
+
+  const handleCheckboxChange = level => {
+    setSelectedLevel(level);
+  };
+
+  const handleStartClick = () => {
+    if (selectedLevel !== null) {
+      navigate(`/game/${selectedLevel}`);
+    } else {
+      alert("Выберите уровень перед началом игры");
+    }
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
         <h1 className={styles.title}>Выбери сложность</h1>
         <ul className={styles.levels}>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to={`/game/3/${checked ? true : false}`}>
-              1
-            </Link>
-          </li>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to={`/game/6/${checked ? true : false}`}>
-              2
-            </Link>
-          </li>
-          <li className={styles.level}>
-            <Link className={styles.levelLink} to={`/game/9/${checked ? true : false}`}>
-              3
-            </Link>
-          </li>
+          {[3, 6, 9].map((level, index) => (
+            <li className={`${styles.level} ${selectedLevel === level ? styles.selected : ""}`} key={index}>
+              <label className={styles.checkboxButton}>
+                <input type="checkbox" checked={selectedLevel === level} onChange={() => handleCheckboxChange(level)} />
+                <span>{index + 1}</span>
+              </label>
+            </li>
+          ))}
         </ul>
-        <div className={styles.gameMode}>
-          <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} id="gameMode" />
-          <label htmlFor="gameMode">Легкий режим с тремя жизнями</label>
-        </div>
-        <div className={styles.leaderboardLinkBox}>
-          <Link to={`/leaderboard`} className={styles.leaderboardLink}>
-            Перейти к лидерборду
-          </Link>
-        </div>
+        <label className={styles.checkboxMode}>
+          <input type="checkbox" onChange={handleEasyModeChange} checked={isEasyMode} />
+          <span>Легкий режим (3 жизни)</span>
+        </label>
+        <button className={styles.buttonStart} onClick={handleStartClick}>
+          Старт
+        </button>
       </div>
     </div>
   );
