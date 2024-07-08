@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./SelectLevelPage.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEasyMode } from "../../hooks/useEasyMode";
+import { useLeaders } from "../../hooks/useLeaders";
+import { getLeaders } from "../../api";
 
 export function SelectLevelPage() {
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -24,6 +26,20 @@ export function SelectLevelPage() {
     }
   };
 
+  const { setLeaders } = useLeaders();
+
+  useEffect(() => {
+    getLeaders().then(response => {
+      const sortedLeaders = response.leaders
+        .map(leader => ({
+          ...leader,
+          name: leader.name.trim() === "" ? "Пользователь" : leader.name,
+        }))
+        .sort((a, b) => a.time - b.time);
+      setLeaders(sortedLeaders);
+    });
+  }, [setLeaders]);
+
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
@@ -45,6 +61,9 @@ export function SelectLevelPage() {
         <button className={styles.buttonStart} onClick={handleStartClick}>
           Старт
         </button>
+        <Link className={styles.leaderboardLink} to="/leaderboard">
+          Перейти к лидерборду
+        </Link>
       </div>
     </div>
   );
