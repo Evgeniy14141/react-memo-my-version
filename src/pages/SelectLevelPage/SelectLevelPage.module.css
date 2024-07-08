@@ -33,7 +33,7 @@
   flex-direction: row;
   gap: 26px;
   margin-top: 48px;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 .level {
@@ -46,6 +46,19 @@
 
   border-radius: 12px;
   background: #fff;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  align-items: center;
+}
+
+.level:hover {
+  border: 2px solid blue;
+}
+
+.selected {
+  border: 2px solid blue;
+  background: #ffffff;
 }
 
 .levelLink {
@@ -61,4 +74,104 @@
 
 .levelLink:visited {
   color: #0080c1;
+}
+
+.checkboxButton {
+  user-select: none;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.checkboxButton input[type=checkbox] {
+  z-index: -1;
+  opacity: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  box-sizing: border-box;
+
+}
+
+.checkboxButton span {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px 10px;
+  /* border: 1px solid #999; */
+  border-radius: 4px;
+  transition: background 0.2s ease;
+
+  color: #0080c1;
+  text-align: center;
+  font-family: StratosSkyeng;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 72px;
+  text-decoration: none;
+}
+
+.checkboxButton input[type=checkbox]:checked+span {
+  background: #ffffff;
+}
+
+.checkboxMode {
+  user-select: none;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.checkboxMode input[type=checkbox] {
+  z-index: -1;
+  opacity: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  box-sizing: border-box;
+
+}
+
+.checkboxMode span {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px 10px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+
+  color: blue;
+  text-align: center;
+  font-family: StratosSkyeng;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 200;
+  line-height: 32px;
+  text-decoration: none;
+  margin-bottom: 20px;
+  border-radius: 30px;
+}
+
+.checkboxMode input[type=checkbox]:checked+span {
+  background: blue;
+  color: #ffffff;
+}
+
+.buttonStart {
+  width: 246px;
+  height: 48px;
+  font-family: StratosSkyeng;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0%;
+  background: #7ac100;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.buttonStart:hover {
+  background: #7ac100cc;
 }
