@@ -4,10 +4,16 @@ import { Button } from "../Button/Button";
 
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLeaders } from "../../hooks/useLeaders";
+import { Link, useNavigate } from "react-router-dom";
+import { postLeader } from "../../api";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
+export function EndGameModal({ isWon, pairsCount, gameDurationSeconds, gameDurationMinutes, onClick }) {
+  const { leaders, setLeaders, isLeader, setIsLeader } = useLeaders();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   let title = isWon ? "Вы победили!" : "Вы проиграли!";
 
   const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
@@ -18,15 +24,19 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
     name: "",
     time: gameDurationSeconds,
   });
-  const { leaders } = useLeaders();
 
-  console.log(leaders);
+  useEffect(() => {
+    const isInLeaderboard =
+      leaders.length > 0 && newLeader.time < leaders[leaders.length - 1].time && isWon && pairsCount === 9;
 
-  if (gameDurationMinutes * 60 + gameDurationSeconds < leaders[2].time && isWon) {
+    if (isInLeaderboard) {
+      setIsLeader(true);
+    }
+  }, [leaders, newLeader.time, isWon, pairsCount, setIsLeader]);
+
+  if (isLeader) {
     title = "Вы попали на лидерборд!";
   }
-
-  let isLeader = gameDurationMinutes * 60 + gameDurationSeconds < leaders[2].time && isWon;
 
   function handleInputChange(event) {
     const { name, value } = event.target;
@@ -34,6 +44,22 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       ...newLeader,
       [name]: value,
     });
+  }
+
+  function handleSaveLeader() {
+    setIsLoading(true);
+
+    postLeader({ name: newLeader.name, time: newLeader.time })
+      .then(response => {
+        setLeaders(response.leaders);
+        navigate("/leaderboard");
+      })
+      .catch(error => {
+        alert(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -50,7 +76,9 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
             placeholder="Пользователь"
             onChange={handleInputChange}
           />
-          <Button>Сохранить результат</Button>
+          <Button onClick={handleSaveLeader} disabled={isLoading}>
+            Подтвердить
+          </Button>
         </div>
       )}
       <p className={styles.description}>Затраченное время:</p>
@@ -59,6 +87,10 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
       </div>
 
       <Button onClick={onClick}>Начать сначала</Button>
+
+      <Link className={styles.leaderboardLink} to="/leaderboard">
+        Перейти к лидерборду
+      </Link>
     </div>
   );
 }
