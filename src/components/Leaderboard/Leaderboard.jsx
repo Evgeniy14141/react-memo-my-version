@@ -40,17 +40,22 @@ export function Leaderboard() {
       </header>
       <section className={styles.section}>
         <div className={styles.sectionTop}>
-          <div>
-            <p className={cn(styles.sectionText, styles.textPosition)}>Позиция</p>
-            <p className={cn(styles.sectionText, styles.textUser)}>Пользователь</p>
-          </div>
+          <p className={cn(styles.sectionText, styles.textPosition)}>Позиция</p>
+          <p className={cn(styles.sectionText, styles.textUser)}>Пользователь</p>
+          <p className={cn(styles.sectionText, styles.textAchievement)}>Достижения</p>
           <p className={cn(styles.sectionText, styles.textTime)}>Время</p>
         </div>
         {isLoading && <span className={styles.loader}>Загрузка...</span>}
         {!isLoading && (
           <>
             {leaders.map((leader, index) => (
-              <LeaderboardList position={`# ${index + 1}`} userName={leader.name} time={leader.time} key={leader.id} />
+              <LeaderboardList
+                position={`# ${index + 1}`}
+                userName={leader.name}
+                time={leader.time}
+                key={leader.id}
+                achievements={leader.achievements}
+              />
             ))}
           </>
         )}

@@ -9,7 +9,7 @@ import { useLeaders } from "../../hooks/useLeaders";
 import { Link, useNavigate } from "react-router-dom";
 import { postLeader } from "../../api";
 
-export function EndGameModal({ isWon, pairsCount, gameDurationSeconds, gameDurationMinutes, onClick }) {
+export function EndGameModal({ isWon, pairsCount, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
   const { leaders, setLeaders, isLeader, setIsLeader } = useLeaders();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +23,7 @@ export function EndGameModal({ isWon, pairsCount, gameDurationSeconds, gameDurat
   const [newLeader, setNewLeader] = useState({
     name: "",
     time: gameDurationSeconds,
+    achievements: achievements,
   });
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export function EndGameModal({ isWon, pairsCount, gameDurationSeconds, gameDurat
   function handleSaveLeader() {
     setIsLoading(true);
 
-    postLeader({ name: newLeader.name, time: newLeader.time })
+    postLeader({ name: newLeader.name, time: newLeader.time, achievements: newLeader.achievements })
       .then(response => {
         setLeaders(response.leaders);
         navigate("/leaderboard");
